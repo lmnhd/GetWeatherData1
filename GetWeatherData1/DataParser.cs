@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 public class DataParser
 {
 	private List<string> rows;
+	private WeatherOBJ wob;
 	public DataParser()
 	{
 	}
@@ -13,11 +14,15 @@ public class DataParser
 	{
 		
 		Dictionary<string, string> data = ParseDatFile(dataFile);
-		WeatherOBJ obj = new WeatherOBJ(data);
-		return obj;
+		 wob = new WeatherOBJ(data);
+		return wob;
 
 
 	}
+	public void GetDateData(int day)
+    {
+		//WeatherOBJ obj = new WeatherOBJ(data);
+    }
 
 	public Dictionary<string, string> ParseDatFile(String file)
 	{
@@ -28,37 +33,49 @@ public class DataParser
 		StreamReader objInput = new StreamReader(file, System.Text.Encoding.Default);
 		string contents = objInput.ReadToEnd().Trim();
 		string[] split = System.Text.RegularExpressions.Regex.Split(contents, "\n+", RegexOptions.None);
-		string[] valNames = new string[split.Length];
+		string[] valNames = new string[17];
 		int[] charLocation = new int[50];
 		int i = 0;
 		string[] namesplit = new string[0];
-		foreach (string s in split)
+		Dictionary<Object,Object> result = new Dictionary<object, object>();
+
+
+
+		foreach (string row in split)
 		{
 			if (i == 0)
 			{
-			 namesplit = System.Text.RegularExpressions.Regex.Split(s, "\\s+", RegexOptions.None);
+			 namesplit = System.Text.RegularExpressions.Regex.Split(row, "\\s+", RegexOptions.None);
 				int p = 0;
 foreach (string s2 in namesplit)
                 {
-					charLocation[p] = s.IndexOf(s2);
+					charLocation[p] = row.IndexOf(s2);
 					p++;
                 }
 				
 			}
+
 			if (i > 0)
 			{
-				string[] split2 = System.Text.RegularExpressions.Regex.Split(s, "\\s+", RegexOptions.None);
+				/*string[] split2 = System.Text.RegularExpressions.Regex.Split(s, "\\s+", RegexOptions.None);
+				int j = 0;*/
 				int j = 0;
+				string[] rowValueSplit = new string[row.Length];
+				WeatherOBJ obj = new WeatherOBJ();
+				
 
-				foreach (string s2 in split2)
+				foreach (string s2 in rowValueSplit)
 				{
+					spreads = new Dictionary<string, string>();
 
-					if (j > 0)
+					if (j >= 0)
 					{
-                        spreads.Add(namesplit[j-1],s2);
+                        spreads.Add(namesplit[j],s2);
 					}
 
 					j++;
+					result.Add(spreads, "");
+					
 				}
 
 				//spreads.Add(s, spreads.Count);

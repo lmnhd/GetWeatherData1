@@ -1,11 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 
+using GetWeatherData1;
+
 DataParser parser = new DataParser();
 string weatherdatastring = @"C:\Users\Jeannine\source\repos\GetWeatherData1\GetWeatherData1\data\weather.dat";
 
 
-parser.ParseWeatherOBJ(weatherdatastring);
+//parser.ParseWeatherOBJ(weatherdatastring);
+
+WeatherOBJ testobj = new WeatherOBJ(weatherdatastring);
+testobj.Parse(28);
 
 
 
