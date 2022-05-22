@@ -10,11 +10,13 @@ string weatherdatastring = @"C:\Users\Jeannine\source\repos\GetWeatherData1\GetW
 //parser.ParseWeatherOBJ(weatherdatastring);
 
 WeatherOBJ testobj = new WeatherOBJ(weatherdatastring);
-testobj.Parse(28);
+//testobj.Parse(28);
+
+int day = testobj.GetMinSpread();
 
 
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Day " + day + " Has the lowest spread and no one in their right mind would want to  know this :)");
 
 /*using System.Text.RegularExpressions;
 

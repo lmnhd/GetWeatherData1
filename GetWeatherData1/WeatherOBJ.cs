@@ -15,7 +15,10 @@ namespace GetWeatherData1
         //Dy MxT   MnT   AvT   HDDay  AvDP 1HrP TPcpn WxType PDir AvSp Dir MxS SkyC MxR MnR AvSLP
         private string[] rows;
         private string[] names;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         public WeatherOBJ(string data)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             //rows = new List<string>();
            // rows = new string[50];
@@ -43,8 +46,21 @@ namespace GetWeatherData1
             foreach(string name in valNames)
             {
                 int loc = valName.IndexOf(name)+1;
-                string val = row.Substring(loc,6);
-                switchVal(name, val.Replace(@" ", ""));
+                try
+                {
+                    string val = row.Substring(loc, 6);
+                    if (val != null)
+                    {
+                        switchVal(name, val);
+                    }
+                }
+                catch
+                {
+//just let it go man!
+                }
+               
+              
+               
             }
         }
         private void switchVal(string n, string v)
@@ -105,6 +121,39 @@ namespace GetWeatherData1
 
             }
         }
+       
+        private float GetSpread(string max, string min)
+        {
+            if(max != null)
+            {
+                float Max = float.Parse(max.Replace("*", ""));
+                float Min = float.Parse(min.Replace("*", ""));
+
+                return Max - Min;
+            }
+            return 99999999;
+        }
+        public int GetMinSpread()
+        {
+            float currentSpread = 0;
+            float minSpreadResult = 0;
+            int minSpreadDay = 1;
+            
+           for (int day = 1; day < rows.Length; day++)
+            {
+
+                Parse(day);
+                currentSpread = GetSpread(MxT, MnT);
+                if((currentSpread < minSpreadResult) || (minSpreadResult == 0))
+                {
+                    minSpreadResult = currentSpread;
+                    minSpreadDay = int.Parse(Dy);
+                }
+
+            }
+            return minSpreadDay;
+        }
+        
         private void ParseDataToProperties(string nextRow)
         {
             //rows.Add(nextRow);
@@ -172,7 +221,7 @@ namespace GetWeatherData1
 
 
         Dictionary<string, string> spreads = new Dictionary<string, string>();
-
+        private string val;
 
         private string[] getNames(List<string> data)
         {
